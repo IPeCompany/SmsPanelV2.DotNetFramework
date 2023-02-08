@@ -1,1 +1,0 @@
-# SmsPanelV2.dotNetFramework

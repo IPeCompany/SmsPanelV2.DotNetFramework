@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package >
+	<metadata>
+		<id>IPE.SmsIr.NetFramework</id>
+		<version>1.0.1</version>
+		<title>SMS.IR .NET Framework Package</title>
+		<authors>IPDev</authors>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<license type="expression">MIT</license>
+		<projectUrl>https://sms.ir/</projectUrl>
+		<description>A .NET Framework library for the sms.ir provider, written in C#</description>
+		<copyright></copyright>
+		<tags>sms, sms.ir, smsir,send sms, dotnet sms, c# sms, send message, message, receive message, receive</tags>
+		<iconUrl>https://ipefileservice.ipdev.ir/file/dd28d60e-23c5-4850-8833-c1b6fa954f69</iconUrl>
+	</metadata>
+</package>
