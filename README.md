@@ -1,7 +1,7 @@
 
 # SMS.IR .NET Framework SDK         
 [![NuGet](https://img.shields.io/badge/nuget-v1.0.1-blue?logo=nuget)](https://www.nuget.org/packages/IPE.SmsIr.NetFramework)
-[![NuGet](https://img.shields.io/badge/dotnet_framework_versions->=_4.5.1-blue?logo=.net)](https://www.nuget.org/packages/IPE.SmsIr.NetFramework/#supportedframeworks-body-tab)
+[![NuGet](https://img.shields.io/badge/supported_.net_framework_versions->=_4.5.1-4CAF50?logo=.net)](https://www.nuget.org/packages/IPE.SmsIr.NetFramework/#supportedframeworks-body-tab)
 
 Sms.ir provides a simple HTTP-based API for sending and receiving text messages.
 This .NET Framework library helps you to use the SmsIr API service more easily in your .NET applications.
@@ -66,60 +66,75 @@ var verificationSendResult = await smsIr.VerifySendAsync("9120000000", 100000, n
 #### Verify Send
 
 ```csharp
-SmsIr smsIr = new SmsIr("YOUR API KEY");
+// 'async void' can also be used for specific use cases, such as events:
+// public async void SendVerifyButton_Click(object sender, EventArgs e)  
+public static async Task SendVerifyAsync()
+{
+    SmsIr smsIr = new SmsIr("YOUR API KEY");
 
-string mobile = "9120000000";
-int templateId = 200000;
-VerifySendParameter[] verifySendParameters = {
-    new VerifySendParameter("NAME", "User Name"),
-    new VerifySendParameter("CODE", "12345"),
-};
+    string mobile = "9120000000";
+    int templateId = 200000;
+    VerifySendParameter[] verifySendParameters = {
+        new VerifySendParameter("NAME", "User Name"),
+        new VerifySendParameter("CODE", "12345"),
+    };
 
-var response = await smsIr.VerifySendAsync(mobile, templateId, verifySendParameters);
+    var response = await smsIr.VerifySendAsync(mobile, templateId, verifySendParameters);
 
-VerifySendResult sendResult = response.Data;
-int messageId = sendResult.MessageId;
-decimal cost = sendResult.Cost;
+    VerifySendResult sendResult = response.Data;
+    int messageId = sendResult.MessageId;
+    decimal cost = sendResult.Cost;
+}
 ```
 
 #### Bulk Send
 
 ```csharp
-SmsIr smsIr = new SmsIr("YOUR API KEY");
+// 'async void' can also be used for specific use cases, such as events:
+// public async void SendBulkButton_Click(object sender, EventArgs e)  
+public static async Task SendBulkAsync()
+{
+    SmsIr smsIr = new SmsIr("YOUR API KEY");
 
-long lineNumber = 95007079000006;
-string messageText = "Message Text\nSMS.ir";
-string[] mobiles = { "9120000000", "9120000001" };
-int? sendDateTime = null; // unix time - for instance: 1704094200
+    long lineNumber = 95007079000006;
+    string messageText = "Message Text\nSMS.ir";
+    string[] mobiles = { "9120000000", "9120000001" };
+    int? sendDateTime = null; // unix time - for instance: 1704094200
 
-var response = await smsIr.BulkSendAsync(lineNumber, messageText, mobiles, sendDateTime);
+    var response = await smsIr.BulkSendAsync(lineNumber, messageText, mobiles, sendDateTime);
 
-SendResult sendResult = response.Data;
-Guid packId = sendResult.PackId;
-int?[] messageIds = sendResult.MessageIds;
-decimal cost = sendResult.Cost;
+    SendResult sendResult = response.Data;
+    Guid packId = sendResult.PackId;
+    int?[] messageIds = sendResult.MessageIds;
+    decimal cost = sendResult.Cost;
+}
 ```
 
 #### Like-To-Like Send
 
 ```csharp
-SmsIr smsIr = new SmsIr("YOUR API KEY");
-
-long lineNumber = 95007079000006;
-string[] messageTexts =
+// 'async void' can also be used for specific use cases, such as events:
+// public async void SendLikeToLikeButton_Click(object sender, EventArgs e)  
+public static async Task SendLikeToLikeAsync()
 {
-    "Message Text 1\nSMS.ir",
-    "Message Text 2\nSMS.ir"
-};
-string[] mobiles = { "9120000000", "9120000001" };
-int? sendDateTime = null; // unix time - for instance: 1704094200
+    SmsIr smsIr = new SmsIr("YOUR API KEY");
 
-var response = await smsIr.LikeToLikeSendAsync(lineNumber, messageTexts, mobiles, sendDateTime);
+    long lineNumber = 95007079000006;
+    string[] messageTexts =
+    {
+        "Message Text 1\nSMS.ir",
+        "Message Text 2\nSMS.ir"
+    };
+    string[] mobiles = { "9120000000", "9120000001" };
+    int? sendDateTime = null; // unix time - for instance: 1704094200
 
-SendResult sendResult = response.Data;
-Guid packId = sendResult.PackId;
-int?[] messageIds = sendResult.MessageIds;
-decimal cost = sendResult.Cost;
+    var response = await smsIr.LikeToLikeSendAsync(lineNumber, messageTexts, mobiles, sendDateTime);
+
+    SendResult sendResult = response.Data;
+    Guid packId = sendResult.PackId;
+    int?[] messageIds = sendResult.MessageIds;
+    decimal cost = sendResult.Cost;
+}
 ```
 
 #### Remove Scheduled
@@ -394,9 +409,9 @@ catch (Exception ex) // An exception occurred, indicating that the request was n
             break;
     }
 
-    string apiResponseErrorMessage = ex.Message;
+    string errorMessage = ex.Message;
     string errorDescription = "There is a problem with the request." +
-        $"\n - Error: {errorName} - {errorNameDescription} - {apiResponseErrorMessage}";
+        $"\n - Error: {errorName} - {errorNameDescription} - {errorMessage}";
 }
 ```
 
