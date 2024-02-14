@@ -19,6 +19,8 @@ namespace IPE.SmsIrClient.Handlers
             {
                 case 401:
                     throw new UnauthorizedException(baseResponse.Status, baseResponse.Message);
+                case 403:
+                    throw new PlanAccessDeniedException(baseResponse.Status, baseResponse.Message);
                 case 400:
                     throw new LogicalException(baseResponse.Status, baseResponse.Message);
                 case 429:

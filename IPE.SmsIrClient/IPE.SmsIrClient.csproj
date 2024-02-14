@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Exceptions\LogicalException.cs" />
+    <Compile Include="Exceptions\PlanAccessDeniedException.cs" />
     <Compile Include="Exceptions\SmsIrException.cs" />
     <Compile Include="Exceptions\TooManyRequestException.cs" />
     <Compile Include="Exceptions\UnauthorizedException.cs" />
