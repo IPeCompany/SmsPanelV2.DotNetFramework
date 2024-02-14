@@ -55,6 +55,7 @@
     <Compile Include="Exceptions\UnauthorizedException.cs" />
     <Compile Include="Exceptions\UnexpectedException.cs" />
     <Compile Include="Extensions\HttpRequestExtensions.cs" />
+    <Compile Include="Handlers\HttpResponseHandler.cs" />
     <Compile Include="Models\Requests\BulkSendRequest.cs" />
     <Compile Include="Models\Requests\LikeToLikeSendRequest.cs" />
     <Compile Include="Models\Requests\VerifySendParameter.cs" />

@@ -1,7 +1,6 @@
-﻿using IPE.SmsIrClient.Exceptions;
+﻿using IPE.SmsIrClient.Handlers;
 using IPE.SmsIrClient.Models.Results;
 using Newtonsoft.Json;
-using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -13,10 +12,14 @@ namespace IPE.SmsIrClient.Extensions
         {
             HttpResponseMessage response = await httpClient.GetAsync(requestUri);
 
-            if (!response.IsSuccessStatusCode)
-                await HandleUnsuccessfulResponse(response);
+            return await HandleResponseAsync<TResult>(response);
+        }
 
-            return JsonConvert.DeserializeObject<SmsIrResult<TResult>>(response.Content.ReadAsStringAsync().Result);
+        internal static SmsIrResult<TResult> GetRequest<TResult>(this HttpClient httpClient, string requestUri)
+        {
+            HttpResponseMessage response = httpClient.GetAsync(requestUri).GetAwaiter().GetResult();
+
+            return HandleResponse<TResult>(response);
         }
 
         internal static async Task<SmsIrResult<TResult>> PostRequestAsync<TResult>(this HttpClient httpClient, string requestUri, object data)
@@ -27,40 +30,48 @@ namespace IPE.SmsIrClient.Extensions
 
             HttpResponseMessage response = await httpClient.PostAsync(requestUri, httpContent);
 
-            if (!response.IsSuccessStatusCode)
-                await HandleUnsuccessfulResponse(response);
+            return await HandleResponseAsync<TResult>(response);
+        }
 
-            return JsonConvert.DeserializeObject<SmsIrResult<TResult>>(response.Content.ReadAsStringAsync().Result);
+        internal static SmsIrResult<TResult> PostRequest<TResult>(this HttpClient httpClient, string requestUri, object data)
+        {
+            string payload = JsonConvert.SerializeObject(data);
+
+            StringContent httpContent = new StringContent(payload, System.Text.Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = httpClient.PostAsync(requestUri, httpContent).GetAwaiter().GetResult();
+
+            return HandleResponse<TResult>(response);
         }
 
         internal static async Task<SmsIrResult<TResult>> DeleteRequestAsync<TResult>(this HttpClient httpClient, string requestUri)
         {
             HttpResponseMessage response = await httpClient.DeleteAsync(requestUri);
 
-            if (!response.IsSuccessStatusCode)
-                await HandleUnsuccessfulResponse(response);
-
-            return JsonConvert.DeserializeObject<SmsIrResult<TResult>>(response.Content.ReadAsStringAsync().Result);
+            return await HandleResponseAsync<TResult>(response);
         }
 
-        private static Task HandleUnsuccessfulResponse(HttpResponseMessage response)
+        internal static SmsIrResult<TResult> DeleteRequest<TResult>(this HttpClient httpClient, string requestUri)
         {
-            SmsIrResult baseResponse = JsonConvert.DeserializeObject<SmsIrResult>(response.Content.ReadAsStringAsync().Result);
-            int statusCode = (int)response.StatusCode;
+            HttpResponseMessage response = httpClient.DeleteAsync(requestUri).GetAwaiter().GetResult();
 
-            switch (statusCode)
+            return HandleResponse<TResult>(response);
+        }
+
+        private static async Task<SmsIrResult<TResult>> HandleResponseAsync<TResult>(HttpResponseMessage response)
+        {
+            if (!response.IsSuccessStatusCode)
             {
-                case 401:
-                    throw new UnauthorizedException(baseResponse.Status, baseResponse.Message);
-                case 400:
-                    throw new LogicalException(baseResponse.Status, baseResponse.Message);
-                case 429:
-                    throw new TooManyRequestException(baseResponse.Status, baseResponse.Message);
-                case 500:
-                    throw new UnexpectedException(baseResponse.Status, baseResponse.Message);
-                default:
-                    throw new InvalidOperationException($"something went wrong, httpStatus code: {response.StatusCode}, message: {response.RequestMessage}, please contact support team.");
+                await HttpResponseHandler.HandleUnsuccessfulResponseAsync(response);
             }
+
+            string content = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<SmsIrResult<TResult>>(content);
+        }
+
+        private static SmsIrResult<TResult> HandleResponse<TResult>(HttpResponseMessage response)
+        {
+            return HandleResponseAsync<TResult>(response).GetAwaiter().GetResult();
         }
     }
 }
