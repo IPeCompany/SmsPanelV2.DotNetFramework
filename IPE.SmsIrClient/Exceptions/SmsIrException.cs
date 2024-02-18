@@ -2,7 +2,7 @@
 
 namespace IPE.SmsIrClient.Exceptions
 {
-    internal class SmsIrException : Exception
+    public class SmsIrException : Exception
     {
         internal readonly byte Status;
 

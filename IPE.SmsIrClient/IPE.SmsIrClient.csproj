@@ -50,11 +50,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Exceptions\LogicalException.cs" />
+    <Compile Include="Exceptions\PlanAccessDeniedException.cs" />
     <Compile Include="Exceptions\SmsIrException.cs" />
     <Compile Include="Exceptions\TooManyRequestException.cs" />
     <Compile Include="Exceptions\UnauthorizedException.cs" />
     <Compile Include="Exceptions\UnexpectedException.cs" />
     <Compile Include="Extensions\HttpRequestExtensions.cs" />
+    <Compile Include="Handlers\HttpResponseHandler.cs" />
     <Compile Include="Models\Requests\BulkSendRequest.cs" />
     <Compile Include="Models\Requests\LikeToLikeSendRequest.cs" />
     <Compile Include="Models\Requests\VerifySendParameter.cs" />
